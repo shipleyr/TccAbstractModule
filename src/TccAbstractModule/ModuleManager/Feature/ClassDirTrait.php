@@ -12,6 +12,6 @@ trait ClassDirTrait
      */
     protected function getDir()
     {
-        return dirname((new \ReflectionClass(get_class($this)))->getFileName());
+        return dirname((new \ReflectionClass(get_class($this)))->getFileName()) . '/..';
     }
 }

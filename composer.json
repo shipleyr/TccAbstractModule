@@ -11,14 +11,11 @@
     ],
     "require": {
         "php": ">=5.3.0"
-   },
-	"minimum-stability" : "stable",
-	"autoload": {
-        "psr-0": {
-            "TccAbstractModule": "src/"
-        },
-        "classmap": [
-            "./Module.php"
-        ]
+    },
+    "minimum-stability" : "stable",
+    "autoload": {
+        "psr-4": {
+            "TccAbstractModule\\": "src/TccAbstractModule/"
+        }
     }
 }

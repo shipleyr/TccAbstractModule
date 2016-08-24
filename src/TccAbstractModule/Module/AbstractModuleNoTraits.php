@@ -13,7 +13,6 @@ use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\Stdlib\ArrayUtils;
 
 abstract class AbstractModuleNoTraits implements
-    AutoloaderProviderInterface,
     ConfigProviderInterface,
     ControllerProviderInterface,
     ServiceProviderInterface,
@@ -34,34 +33,6 @@ abstract class AbstractModuleNoTraits implements
      * @var string
      */
     protected $relativeModuleDir = '';
-
-    /**
-     * Return an array to configure a default autoloader instance.
-     *
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        $autoloaderArray = array();
-
-        // If this module has a defined classmap, add a classmap autoloader.
-        $classmapPath = $this->getDir() . '/' . $this->relativeModuleDir . 'autoload_classmap.php';
-        if (file_exists($classmapPath)) {
-            $autoloaderArray['Zend\Loader\ClassMapAutoloader'] = array(
-                $classmapPath
-            );
-        }
-
-        // Fallback to a PSR-0 autoloader.
-        $autoloaderArray['Zend\Loader\StandardAutoloader'] = array(
-            'namespaces' => array(
-                $this->getNamespace() =>
-                $this->getDir() . '/' . $this->relativeModuleDir . 'src/' . $this->getNamespace(),
-            ),
-        );
-
-        return $autoloaderArray;
-    }
 
     /**
      * Return and merge configuration for this module from the default location of ./config/module.config{,.*}php.
@@ -167,18 +138,6 @@ abstract class AbstractModuleNoTraits implements
     protected function getDir()
     {
         $reflectionClass = new \ReflectionClass(get_class($this));
-        return dirname($reflectionClass->getFileName());
-    }
-
-    /**
-     * Because __NAMESPACE__ in a child class returns the namespace for the parent class, this workaround is required
-     * to get the namespace of the child class.
-     *
-     * @returns string
-     */
-    protected function getNamespace()
-    {
-        $reflectionClass = new \ReflectionClass(get_class($this));
-        return dirname($reflectionClass->getNamespaceName());
+        return dirname($reflectionClass->getFileName()) . '/..';
     }
 }
